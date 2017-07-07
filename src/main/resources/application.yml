@@ -1,8 +1,8 @@
 spring:
-   data:
-      mongodb.uri: mongodb://worker:password@ds151082.mlab.com:51082/lbc-worker-mongo
-      mongo.repositories.enabled: true
-   mvc:
+  data:
+    mongodb:
+      uri: mongodb://worker:password@ds151082.mlab.com:51082/lbc-worker-mongo
+  mvc:
     view:
       prefix: 
       suffix: .ftl

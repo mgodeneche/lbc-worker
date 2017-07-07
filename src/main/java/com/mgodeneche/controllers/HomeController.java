@@ -2,7 +2,6 @@ package com.mgodeneche.controllers;
 
 import java.text.DateFormat;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -11,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -18,12 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.mgodeneche.entity.Research;
+import com.mgodeneche.repositories.ResearchRepository;
 
 /**
  * Handles requests for the application home page.
  */
 @Controller
 public class HomeController {
+	
+	Boolean debug = true;
+	
+	@Autowired
+	ResearchRepository repository;
 	
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 	
@@ -46,17 +52,20 @@ public class HomeController {
 	
 	@RequestMapping(value="/newSearch")
 	public String createNewResearch(HttpServletRequest  req, ModelMap model){
-		instanciateResearch(req);
-		//TODO persist
+		Research r = instanciateResearch(req);
+		repository.save(r);
 		
 		return null;
 	}
 	@RequestMapping(value="/home")
 	public String getResearchList(HttpServletRequest  req, ModelMap model){
-		//TODO connexionBDD
-		List<Research> researchlist = new ArrayList();
+		List<Research> researchlist = repository.findAll();
 		model.addAttribute("researchList",researchlist);
-		
+		if(debug){
+			for(Research r : researchlist){
+				System.out.println(r.toString());
+			}
+		}
 		return "list";
 	}
 	private Research instanciateResearch(HttpServletRequest  req){

@@ -1,13 +1,18 @@
 package com.mgodeneche.entity;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
-@Entity
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "research")
 public class Research {
 
+	@Id
+	@GeneratedValue
+	private Long id;
 	private String region;
 	private String departement;
 	private String keywords;
@@ -21,6 +26,13 @@ public class Research {
 	public Research(){
 		super();
 		
+	}
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
 	}
 	
 	public String getRegion() {
@@ -78,6 +90,7 @@ public class Research {
 	public String toString() {
 		return "Research on ["+keywords+"] in ["+region+"] + ["+departement+"] between ["+minPrice+"] and ["+maxPrice+"] started ["+startDate+"]";
 	}
+
 	
 
 	
