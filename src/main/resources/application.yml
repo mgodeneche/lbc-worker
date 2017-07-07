@@ -1,0 +1,12 @@
+spring:
+   data:
+      mongodb.uri: mongodb://worker:password@ds151082.mlab.com:51082/lbc-worker-mongo
+      mongo.repositories.enabled: true
+   mvc:
+    view:
+      prefix: 
+      suffix: .ftl
+server:
+  context-path: /lbc-worker
+  port: 8084
+
