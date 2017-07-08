@@ -47,7 +47,7 @@ public class HomeController {
 		
 		model.addAttribute("serverTime", formattedDate );
 		
-		return "home";
+		return "searchForm";
 	}
 	
 	@RequestMapping(value="/newSearch")
@@ -55,12 +55,12 @@ public class HomeController {
 		Research r = instanciateResearch(req);
 		repository.save(r);
 		
-		return null;
+		return getResearchList(req, model);
 	}
-	@RequestMapping(value="/home")
+	@RequestMapping(value="/researchList")
 	public String getResearchList(HttpServletRequest  req, ModelMap model){
 		List<Research> researchlist = repository.findAll();
-		model.addAttribute("researchList",researchlist);
+		model.addAttribute("researchList", researchlist);
 		if(debug){
 			for(Research r : researchlist){
 				System.out.println(r.toString());

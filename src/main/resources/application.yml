@@ -2,10 +2,12 @@ spring:
   data:
     mongodb:
       uri: mongodb://worker:password@ds151082.mlab.com:51082/lbc-worker-mongo
-  mvc:
-    view:
-      prefix: 
+  mvc.view:
+      prefix:
       suffix: .ftl
+  freemarker:
+      templateLoaderPath: classpath:templates/
+      cache: false  
 server:
   context-path: /lbc-worker
   port: 8084
