@@ -38,6 +38,11 @@ public class ResultItem {
 	public void setCreationDate(LocalDateTime creationDate) {
 		this.creationDate = creationDate;
 	}
+	@Override
+	public String toString() {
+		return "ResultItem : Annonce : [title=" + title + ", category=" + category + ", localization=" + localization + ", price="
+				+ price + ", creationDate=" + creationDate + "]";
+	}
 	
 	
 	

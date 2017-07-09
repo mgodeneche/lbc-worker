@@ -10,6 +10,8 @@ import com.mgodeneche.entity.ResultItem;
 
 public class ParserUtil {
 	private final static String EMPTY ="";
+	private final static String SPACE="\\s";
+	private final static String EURO="€";
 	private static final Logger logger = LoggerFactory.getLogger(ParserUtil.class);
 	
 	public  void parseHttpResponse(Document doc){
@@ -23,18 +25,19 @@ public class ParserUtil {
 	
 	private ResultItem parseItemInfos(Element itemInfos){
 		ResultItem rI = new ResultItem();
-		getItemTitle(itemInfos);
-		//getPrice(itemInfos);
+		rI.setTitle(getItemTitle(itemInfos));
+		rI.setPrice(getPrice(itemInfos));
 		//getCategory(itemInfos);
 		
 		
+		logger.info(rI.toString());
 		return rI;
 	}
 	private String getItemTitle(Element itemInfos){
 		Elements items = itemInfos.select(".item_title");
 		for(Element item : items){
 			String s = item.text();
-			if(s.length()<0){
+			if(s.length()>0){
 				return s;
 			}
 		}
@@ -51,13 +54,21 @@ public class ParserUtil {
 		
 		return EMPTY;
 	}
-	private String getPrice(Element itemInfos){
+	private Float getPrice(Element itemInfos){
 		Elements items = itemInfos.select(".item_price");
 		for(Element item : items){
 			String s = item.text();
 			logger.info(s);
+			s = s.replaceAll(EURO,EMPTY);
+			s = s.replaceAll(SPACE,EMPTY);
+			s = s.replaceAll("\u00a0",EMPTY);
+			logger.info("."+s+".");
+			Float f = Float.valueOf(s);
+			if(null!= f){
+				return f;
+			}
 		}
 		
-		return EMPTY;
+		return (float) 0;
 	}
 }
