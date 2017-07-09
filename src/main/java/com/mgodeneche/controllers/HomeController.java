@@ -2,6 +2,7 @@ package com.mgodeneche.controllers;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -14,6 +15,8 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,43 +92,14 @@ public class HomeController {
 	}
 	private void doSearchCall(){
 		String urlString = "https://www.leboncoin.fr/annonces/offres/aquitaine/?th=1&q=400%20DRZ%20";
-		HttpURLConnection connection =null;
+		Document document;
 		try {
-		    //Create connection
-		    URL url = new URL(urlString);
-		    connection = (HttpURLConnection) url.openConnection();
-		    connection.setRequestMethod("POST");
-		    connection.setRequestProperty("Content-Type", 
-		        "application/x-www-form-urlencoded");
-		    connection.setUseCaches(false);
-		    connection.setDoOutput(true);
-
-		    //Send request
-		    DataOutputStream wr = new DataOutputStream (
-		        connection.getOutputStream());
-		    wr.close();
-
-		    //Get Response  
-		    InputStream is = connection.getInputStream();
-		    BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-		    StringBuilder response = new StringBuilder(); // or StringBuffer if Java version 5+
-		    String line;
-		    while ((line = rd.readLine()) != null) {
-		      response.append(line);
-		      response.append('\r');
-		    }
-		    rd.close();
-		    utils.parseHttpResponse(response.toString());
-		    if(debug){
-		    	//System.out.println(response.toString());
-		    }
-		  } catch (Exception e) {
-		    e.printStackTrace();
-		  } finally {
-		    if (connection != null) {
-		      connection.disconnect();
-		    }
-		  }
+			document = Jsoup.connect(urlString).get();
+			utils.parseHttpResponse(document);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 }
