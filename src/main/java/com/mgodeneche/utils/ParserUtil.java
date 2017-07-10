@@ -12,6 +12,7 @@ public class ParserUtil {
 	private final static String EMPTY ="";
 	private final static String SPACE="\\s";
 	private final static String EURO="€";
+	private final static String ENCODED_SPACE="\u00a0";
 	private static final Logger logger = LoggerFactory.getLogger(ParserUtil.class);
 	
 	public  void parseHttpResponse(Document doc){
@@ -27,10 +28,10 @@ public class ParserUtil {
 		ResultItem rI = new ResultItem();
 		rI.setTitle(getItemTitle(itemInfos));
 		rI.setPrice(getPrice(itemInfos));
-		//getCategory(itemInfos);
+		getCategory(itemInfos);
 		
 		
-		logger.info(rI.toString());
+		//logger.info(rI.toString());
 		return rI;
 	}
 	private String getItemTitle(Element itemInfos){
@@ -58,17 +59,16 @@ public class ParserUtil {
 		Elements items = itemInfos.select(".item_price");
 		for(Element item : items){
 			String s = item.text();
-			logger.info(s);
-			s = s.replaceAll(EURO,EMPTY);
-			s = s.replaceAll(SPACE,EMPTY);
-			s = s.replaceAll("\u00a0",EMPTY);
-			logger.info("."+s+".");
-			Float f = Float.valueOf(s);
-			if(null!= f){
-				return f;
-			}
+			return normalizePrice(s);
+	
 		}
 		
 		return (float) 0;
+	}
+	private Float normalizePrice(String s){
+		s = s.replaceAll(EURO,EMPTY);
+		s = s.replaceAll(SPACE,EMPTY);
+		s = s.replaceAll(ENCODED_SPACE,EMPTY);
+		return Float.valueOf(s);
 	}
 }
